@@ -1,8 +1,12 @@
-from pysis.isis import getkey
+"""
+This is a utility script to get a list of filters in the cubs/ directory
+"""
 import glob
-import tqdm
-from multiprocessing import Pool
 import signal
+from multiprocessing import Pool
+
+import tqdm
+from pysis.isis import getkey
 
 
 def initializer():

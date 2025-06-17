@@ -1,9 +1,15 @@
-from pysis.isis import spiceinit, cisscal, phocube
+"""
+This script calibrates the Cassini cubs from the cubs/ folder
+and places the calibrated cubs in the calibrated_cubs/ folder
+"""
+
 import glob
 import os
-import tqdm
 import signal
 from multiprocessing import Pool
+
+import tqdm
+from pysis.isis import cisscal, phocube, spiceinit
 
 
 def initializer():
@@ -13,25 +19,41 @@ def initializer():
 
 def calibrate(cube):
     try:
-        spiceinit(from_=cube, pck=os.path.join(os.environ.get('ISISDATA'), 'base/kernels/pck/pck00008.tpc'))
+        # initialize the spice kernels to get positioning data
+        spiceinit(
+            from_=cube,
+            pck=os.path.join(
+                os.environ.get('ISISDATA'), 'base/kernels/pck/pck00008.tpc'
+            ),
+        )
+        # calibrate the cube
         cisscal(from_=cube, to=cube.replace('cubs', 'calibrated_cubs'))
-        phocube(from_=cube, to=cube.replace('cubs', 'calibrated_cubs').replace('.cub', '_backplane.cub'))
-    except Exception:
+        # also generate the backplanes (emission/incidence angles, etc.)
+        phocube(
+            from_=cube,
+            to=cube.replace('cubs', 'calibrated_cubs').replace(
+                '.cub', '_backplane.cub'
+            ),
+        )
+    except Exception as e:
         print(f"Skipping {cube}")
+        print(e)
         return
 
 
 jupiter_cubes = []
 for cube in sorted(glob.glob('cubs/*/*.cub')):
     filter_name = os.path.dirname(cube).split('/')[-1]
-    if filter_name in ['RED']:
+    if filter_name in ['RED', 'GRN', 'BL1']:
         outfile = cube.replace('cubs', 'calibrated_cubs')
         if not os.path.exists(os.path.dirname(outfile)):
             os.makedirs(os.path.dirname(outfile))
-        if not os.path.exists(cube.replace('cubs', 'calibrated_cubs').replace('.cub', '_backplane.cub')):
+        if not os.path.exists(
+            cube.replace('cubs', 'calibrated_cubs').replace('.cub', '_backplane.cub')
+        ):
             jupiter_cubes.append(cube)
 
-print(len(jupiter_cubes))
+print(f"Found {len(jupiter_cubes)} cubes")
 
 with Pool(processes=10, initializer=initializer) as pool:
     try:
