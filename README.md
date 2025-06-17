@@ -49,7 +49,7 @@ cassini_processing
 ```
 
 ### Running the processing scripts
-The scripts can be run with `uv` or `python`. 
+The scripts can be run with `uv` or `python`.  If running with `uv` make sure your environment files have the `ISISROOT` and `ISISDATA` keys set.
 
 1. Convert the data to ISIS3 format:
 
