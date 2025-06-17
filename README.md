@@ -29,7 +29,7 @@ uv sync
 
 ### Folder structure
 The folder structure for the code and data is as follows:
-```bash
+```
 cassini_processing
     | -- ** main scripts **
     | -- jupiter_imgs/  # where the PDS LBL/IMG files are stored
