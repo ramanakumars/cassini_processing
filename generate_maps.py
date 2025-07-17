@@ -51,7 +51,7 @@ def project(cube):
 
 jupiter_cubes = []
 for cube in tqdm.tqdm(
-    sorted(glob.glob('calibrated_cubs/*/*.cub')), desc='Getting list of files'
+    sorted(glob.glob('calibrated_cubs/*/*_norm.cub')), desc='Getting list of files'
 ):
     filter_name = os.path.dirname(cube).split('/')[-1]
     if filter_name in ['RED', 'GRN', 'BL1']:
