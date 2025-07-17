@@ -1,0 +1,13 @@
+Group = Mapping
+  ProjectionName     = Equirectangular
+  CenterLongitude    = 0.0
+  CenterLatitude     = 0.0
+  TargetName         = JUPITER
+  EquatorialRadius   = 71492000.0 <meters>
+  PolarRadius        = 66854000.0 <meters>
+  LatitudeType       = Planetographic
+  LongitudeDirection = PositiveEast
+  LongitudeDomain    = 180
+  Scale              = 10.0 <pixels/degree>
+End_Group
+End

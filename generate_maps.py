@@ -40,7 +40,7 @@ def project(cube):
             minlon=-180,
             maxlat=90,
             maxlon=180,
-            to=f"maps/{filter}/{filename}",
+            to=f"maps_dynamics/{filter}/{filename}",
         )
     except Exception as e:
         print(e.stderr)
