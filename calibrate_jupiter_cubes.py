@@ -9,7 +9,7 @@ import signal
 from multiprocessing import Pool
 
 import tqdm
-from pysis.isis import cisscal, phocube, spiceinit
+from pysis.isis import cisscal, phocube, photomet, spiceinit
 
 
 def initializer():
@@ -26,8 +26,18 @@ def calibrate(cube):
                 os.environ.get('ISISDATA'), 'base/kernels/pck/pck00008.tpc'
             ),
         )
-        # calibrate the cube
-        cisscal(from_=cube, to=cube.replace('cubs', 'calibrated_cubs'))
+        calibrated_cube = cube.replace('cubs', 'calibrated_cubs')
+        cisscal(from_=cube, to=calibrated_cube)
+        normalized_cube = calibrated_cube.replace('.cub', '_norm.cub')
+        photomet(
+            from_=calibrated_cube,
+            to=normalized_cube,
+            phtname='lommelseeliger',
+            normname='albedo',
+            incref=0,
+            thresh=10,
+            albedo=0.6,
+        )
         # also generate the backplanes (emission/incidence angles, etc.)
         phocube(
             from_=cube,
