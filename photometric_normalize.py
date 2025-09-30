@@ -9,7 +9,7 @@ import signal
 from multiprocessing import Pool
 
 import tqdm
-from pysis.isis import spiceinit
+from pysis.isis import photomet
 
 
 def initializer():
@@ -23,24 +23,28 @@ ISISDATA = os.environ.get("ISISDATA")
 def calibrate(cube):
     try:
         # initialize the spice kernels to get positioning data
-        spiceinit(
-            from_=cube,
-            pck=os.path.join(
-                os.environ.get('ISISDATA'), 'base/kernels/pck/pck00009.tpc'
-            ),
-            shape="ellipsoid",
-            ik=os.path.join(ISISDATA, 'cassini/kernels/ik/cas_iss_v10.ti'),
-            ck=os.path.join(
-                ISISDATA,
-                'cassini/kernels/ck/00306_00335ca_ISS.bc',
-            ),
-            spk=os.path.join(
-                ISISDATA, 'cassini/kernels/spk/010420R_SCPSE_EP1_JP83.bsp'
-            ),
-            iak=os.path.join(ISISDATA, 'cassini/kernels/iak/IssNAAddendum005.ti'),
-        )
         calibrated_cube = cube.replace('cubs', 'calibrated_cubs')
         # cisscal(from_=cube, to=calibrated_cube)
+        normalized_cube = calibrated_cube.replace('.cub', '_norm.cub')
+        photomet(
+            from_=calibrated_cube,
+            to=normalized_cube,
+            phtname='minnaert',
+            k=0.9,
+            maxincidence=88,
+            maxemission=88,
+            normname='albedo',
+            incref=0,
+            thresh=2,
+            albedo=0.6,
+        )
+        # # also generate the backplanes (emission/incidence angles, etc.)
+        # phocube(
+        #     from_=cube,
+        #     to=cube.replace('cubs', 'calibrated_cubs').replace(
+        #         '.cub', '_backplane.cub'
+        #     ),
+        # )
     except Exception as e:
         print(f"Skipping {cube}")
         print(e)
@@ -60,7 +64,7 @@ print(f"Found {len(jupiter_cubes)} cubes")
 
 with Pool(processes=10, initializer=initializer) as pool:
     try:
-        with tqdm.tqdm(total=len(jupiter_cubes), desc='Calibrating data') as pbar:
+        with tqdm.tqdm(total=len(jupiter_cubes), desc='Normalizing data') as pbar:
             for _ in pool.imap_unordered(calibrate, jupiter_cubes):
                 pbar.update()
     except KeyboardInterrupt:

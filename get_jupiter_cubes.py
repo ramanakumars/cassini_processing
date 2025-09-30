@@ -13,7 +13,8 @@ from dateutil import parser
 from pysis.isis import ciss2isis
 
 # get the list of PDS labels that we need to process
-labels = sorted(glob.glob('../cassini/data/raw_data/*/*.LBL'))
+# labels = sorted(glob.glob('../cassini/data/raw_data/*/*.LBL'))
+labels = sorted(glob.glob('../coiss_1002/data/*/*.LBL'))
 
 # get the existing LBLs in the processing folder (useful when restarting code)
 jupiter_lbls = sorted(glob.glob('jupiter_imgs/*.LBL'))

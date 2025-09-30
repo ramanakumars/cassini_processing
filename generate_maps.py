@@ -27,7 +27,7 @@ def project(cube):
         spiceinit(
             from_=cube,
             pck=os.path.join(
-                os.environ.get('ISISDATA'), 'base/kernels/pck/pck00008.tpc'
+                os.environ.get('ISISDATA'), 'base/kernels/pck/pck00009.tpc'
             ),
         )
         cam2map(
@@ -58,8 +58,7 @@ for cube in tqdm.tqdm(
         outfile = cube.replace('calibrated_cubs', 'maps_dynamics')
         if not os.path.exists(os.path.dirname(outfile)):
             os.makedirs(os.path.dirname(outfile))
-        if not os.path.exists(outfile):
-            jupiter_cubes.append(cube)
+        jupiter_cubes.append(cube)
 
 print(f"Found {len(jupiter_cubes)} cubes")
 
