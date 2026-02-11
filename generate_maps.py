@@ -8,7 +8,7 @@ import signal
 from multiprocessing import Pool
 
 import tqdm
-from pysis.isis import cam2map, spiceinit
+from kalasiris import cam2map, spiceinit
 
 mapfile = os.path.join(
     os.environ.get('ISISROOT'), 'appdata/templates/maps/equirectangular.map'
@@ -24,12 +24,6 @@ def project(cube):
     filename = os.path.basename(cube)
     try:
         filter = os.path.dirname(cube).split('/')[-1]
-        spiceinit(
-            from_=cube,
-            pck=os.path.join(
-                os.environ.get('ISISDATA'), 'base/kernels/pck/pck00009.tpc'
-            ),
-        )
         cam2map(
             from_=cube,
             map='maps/template.map',

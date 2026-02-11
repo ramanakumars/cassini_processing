@@ -9,7 +9,7 @@ import signal
 from multiprocessing import Pool
 
 import tqdm
-from pysis.isis import spiceinit
+from kalasiris import spiceinit
 
 
 def initializer():
@@ -39,7 +39,7 @@ def calibrate(cube):
             ),
             iak=os.path.join(ISISDATA, 'cassini/kernels/iak/IssNAAddendum005.ti'),
         )
-        calibrated_cube = cube.replace('cubs', 'calibrated_cubs')
+        # calibrated_cube = cube.replace('cubs', 'calibrated_cubs')
         # cisscal(from_=cube, to=calibrated_cube)
     except Exception as e:
         print(f"Skipping {cube}")

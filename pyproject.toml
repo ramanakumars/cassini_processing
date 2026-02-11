@@ -5,7 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
+    "kalasiris>=1.11.0",
     "numpy>=2.2.6",
-    "pysis>=0.6.0",
     "tqdm>=4.67.1",
 ]

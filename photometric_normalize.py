@@ -9,7 +9,7 @@ import signal
 from multiprocessing import Pool
 
 import tqdm
-from pysis.isis import photomet
+from kalasiris import photomet, cisscal
 
 
 def initializer():
@@ -24,7 +24,7 @@ def calibrate(cube):
     try:
         # initialize the spice kernels to get positioning data
         calibrated_cube = cube.replace('cubs', 'calibrated_cubs')
-        # cisscal(from_=cube, to=calibrated_cube)
+        cisscal(from_=cube, to=calibrated_cube)
         normalized_cube = calibrated_cube.replace('.cub', '_norm.cub')
         photomet(
             from_=calibrated_cube,
