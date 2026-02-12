@@ -48,7 +48,7 @@ for cube in tqdm.tqdm(
     sorted(glob.glob('calibrated_cubs/*/*_norm.cub')), desc='Getting list of files'
 ):
     filter_name = os.path.dirname(cube).split('/')[-1]
-    if filter_name in ['RED', 'GRN', 'BL1']:
+    if filter_name in ['CB2', 'GRN', 'BL1']:
         outfile = cube.replace('calibrated_cubs', 'maps_dynamics')
         if not os.path.exists(os.path.dirname(outfile)):
             os.makedirs(os.path.dirname(outfile))

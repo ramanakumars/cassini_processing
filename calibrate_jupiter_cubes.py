@@ -50,7 +50,7 @@ def calibrate(cube):
 jupiter_cubes = []
 for cube in sorted(glob.glob('cubs/*/*.cub')):
     filter_name = os.path.dirname(cube).split('/')[-1]
-    if filter_name in ['RED', 'GRN', 'BL1']:
+    if filter_name in ['CB2', 'GRN', 'BL1']:
         outfile = cube.replace('cubs', 'calibrated_cubs')
         if not os.path.exists(os.path.dirname(outfile)):
             os.makedirs(os.path.dirname(outfile))
