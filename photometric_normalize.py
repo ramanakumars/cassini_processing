@@ -9,7 +9,7 @@ import signal
 from multiprocessing import Pool
 
 import tqdm
-from kalasiris import photomet, cisscal
+from kalasiris import photomet, cisscal, phocube
 
 
 def initializer():
@@ -19,8 +19,11 @@ def initializer():
 
 ISISDATA = os.environ.get("ISISDATA")
 
+MINNAERT_K = {'GRN': 0.95, 'BL1': 0.88, 'CB2': 0.99}
 
-def calibrate(cube):
+def calibrate(cube_data):
+    cube = cube_data['filename']
+    k = MINNAERT_K[cube_data['filter']]
     try:
         # initialize the spice kernels to get positioning data
         calibrated_cube = cube.replace('cubs', 'calibrated_cubs')
@@ -30,7 +33,7 @@ def calibrate(cube):
             from_=calibrated_cube,
             to=normalized_cube,
             phtname='minnaert',
-            k=0.9,
+            k=k,
             maxincidence=88,
             maxemission=88,
             normname='albedo',
@@ -39,26 +42,28 @@ def calibrate(cube):
             albedo=0.6,
         )
         # # also generate the backplanes (emission/incidence angles, etc.)
-        # phocube(
-        #     from_=cube,
-        #     to=cube.replace('cubs', 'calibrated_cubs').replace(
-        #         '.cub', '_backplane.cub'
-        #     ),
-        # )
+        phocube(
+            from_=cube,
+            to=cube.replace('cubs', 'calibrated_cubs').replace(
+                '.cub', '_backplane.cub'
+            ),
+        )
     except Exception as e:
         print(f"Skipping {cube}")
         print(e)
+        if os.path.exists(calibrated_cube):
+            os.remove(calibrated_cube)
         return
 
 
 jupiter_cubes = []
 for cube in sorted(glob.glob('cubs/*/*.cub')):
     filter_name = os.path.dirname(cube).split('/')[-1]
-    if filter_name in ['RED', 'GRN', 'BL1']:
+    if filter_name in ['CB2', 'GRN', 'BL1']:
         outfile = cube.replace('cubs', 'calibrated_cubs')
         if not os.path.exists(os.path.dirname(outfile)):
             os.makedirs(os.path.dirname(outfile))
-        jupiter_cubes.append(cube)
+        jupiter_cubes.append({ "filename": cube, "filter": filter_name })
 
 print(f"Found {len(jupiter_cubes)} cubes")
 
