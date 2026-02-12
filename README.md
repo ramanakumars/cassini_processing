@@ -7,7 +7,7 @@ You will need to set up USGS/ISIS3 software and make sure you are able to access
 
 ### Getting the Cassini kernels
 
-You will need to download the base and Cassini SPICE kernels for these scripts. Instructions are given ![here](https://astrogeology.usgs.gov/docs/how-to-guides/environment-setup-and-maintenance/isis-data-area/#the-base-data-area).
+You will need to download the base and Cassini SPICE kernels for these scripts. Instructions are given [here](https://astrogeology.usgs.gov/docs/how-to-guides/environment-setup-and-maintenance/isis-data-area/#the-base-data-area).
 
 ### Python dependencies
 
